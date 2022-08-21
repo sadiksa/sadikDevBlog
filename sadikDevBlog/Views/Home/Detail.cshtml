@@ -1,0 +1,13 @@
+@model sadikDevBlog.Models.Blog.BlogPost
+<div class="row pb-5">
+    <div class="col">
+        <img src="@Model.ImagePath" class="img-fluid rounded" alt="@Model.Header">
+        <h1 class="border-bottom pb-1">@Model.Header</h1>
+        <h3 class="fw-light">@Model.ShortContent <span class="fw-ligther fs-6 text-muted">Date: @Model.CreateDate</span></h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        @Html.Raw(Model.Content.Content)
+    </div>
+</div>

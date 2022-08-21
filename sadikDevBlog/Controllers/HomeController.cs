@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using sadikDevBlog.Data;
 using sadikDevBlog.Models;
 using sadikDevBlog.Models.Blog;
@@ -24,10 +25,9 @@ public class HomeController : Controller
     public List<BlogPost> GetListBlogPost(int startFrom, int take){
         return _context.BlogPosts.Skip(startFrom).Take(take).ToList();
     }
-
-    public IActionResult Privacy()
-    {
-        return View();
+    public IActionResult Detail(int postId){
+        var blogPost = _context.Set<BlogPost>().Include(x => x.Content).First(x => x.Id == postId);
+        return View(blogPost);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
