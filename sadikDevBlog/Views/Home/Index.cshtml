@@ -42,9 +42,6 @@
             <button @@click="getMoreBlogPost" type="button" class="btn btn-outline-secondary">Load More...</button>
         </div>
     </div>
-
-    {{ message }}
-
 </div>
 @section Vue{}
 @section Scripts{
@@ -54,21 +51,18 @@
     createApp({
         data() {
             return {
-                message: 'Hello Vue!',
                 isLoaded: false,
                 posts: [],
                 lastIndexOfLoadedPosts: 0
             }
         },
         methods: {
-            getListBlogPost(startFrom, take = 2) {
+            getListBlogPost(startFrom, take = 6) {
                 axios.get("/home/getlistblogpost", { params: { startFrom, take } }).then(response => {
                     this.$data.posts.push(...response.data)
                     this.$data.lastIndexOfLoadedPosts += response.data.length
 
-                    setTimeout(() => {
-                        this.$data.isLoaded = true
-                    }, 3000)
+                    this.$data.isLoaded = true
                 })
             },
             getMoreBlogPost() {

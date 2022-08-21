@@ -6,31 +6,32 @@
     <div class="row">
         <h1 class="border-bottom pb-1">Blog Posts <a class="btn btn-secondary" href="admin/add">Add</a></h1>
         <div class="row" v-if="isLoaded">
-            
+
             <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Id</th>
-      <th scope="col">Header</th>
-      <th scope="col">Short Content</th>
-      <th scope="col">Image Path</th>
-      <th scope="col">Create Date</th>
-      <th scope="col">Update Date</th>
-      <th scope="col">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr v-for="post in posts">
-        <td>{{post.id}}</td>
-        <td>{{post.header}}</td>
-        <td>{{post.shortContent}}</td>
-        <td>{{post.imagePath}}</td>
-        <td>{{post.createDate}}</td>
-        <td>{{post.updateDate}}</td>
-        <td><a class="btn btn-secondary" :href="'admin/update?postId='+post.id">Update</a><a class="btn btn-secondary" :href="'admin/delete?postId='+post.id">Delete</a></td>
-    </tr>
-  </tbody>
-</table>
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Header</th>
+                        <th scope="col">Short Content</th>
+                        <th scope="col">Image Path</th>
+                        <th scope="col">Create Date</th>
+                        <th scope="col">Update Date</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="post in posts">
+                        <td>{{post.id}}</td>
+                        <td>{{post.header}}</td>
+                        <td>{{post.shortContent}}</td>
+                        <td>{{post.imagePath}}</td>
+                        <td>{{post.createDate}}</td>
+                        <td>{{post.updateDate}}</td>
+                        <td><a class="btn btn-secondary" :href="'admin/update?postId='+post.id">Update</a><a
+                                class="btn btn-secondary" :href="'admin/delete?postId='+post.id">Delete</a></td>
+                    </tr>
+                </tbody>
+            </table>
 
         </div>
         <div v-else>
@@ -62,9 +63,7 @@
                 axios.get("/admin/getlistblogpost").then(response => {
                     this.$data.posts.push(...response.data)
 
-                    setTimeout(() => {
-                        this.$data.isLoaded = true
-                    }, 3000)
+                    this.$data.isLoaded = true
                 })
             }
         },
