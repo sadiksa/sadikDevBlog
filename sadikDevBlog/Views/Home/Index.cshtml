@@ -7,21 +7,23 @@
         <div class="row" v-if="isLoaded">
             <div v-for="post in posts"
                 class="col-lg-4 col-md-6 col-sm-12  blog-post-list-container pt-3 rounded blog-post-list-container pt-3 rounded">
-                <div class="row">
-                    <div class="col">
-                        <img :src="post.imagePath" class="img-fluid rounded float-start border" alt="vue">
+                <a :href="'home/detail?postId='+post.id">
+                    <div class="row">
+                        <div class="col">
+                            <img :src="post.imagePath" class="img-fluid rounded float-start border" alt="vue">
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <h3 class="pt-3">{{post.header}}</h3>
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="pt-3">{{post.header}}</h3>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <h6 class="fw-light">{{post.shortContent}}</h6>
+                    <div class="row">
+                        <div class="col">
+                            <h6 class="fw-light">{{post.shortContent}}</h6>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
         <div v-else>
@@ -61,10 +63,8 @@
         methods: {
             getListBlogPost(startFrom, take = 2) {
                 axios.get("/home/getlistblogpost", { params: { startFrom, take } }).then(response => {
-                    console.log("response", response)
                     this.$data.posts.push(...response.data)
                     this.$data.lastIndexOfLoadedPosts += response.data.length
-                    console.log("data", this.$data)
 
                     setTimeout(() => {
                         this.$data.isLoaded = true

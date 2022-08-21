@@ -2,8 +2,76 @@
     ViewData["Title"] = "Admin Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Welcome admin page!</p>
-</div>
+<div id="app">
+    <div class="row">
+        <h1 class="border-bottom pb-1">Blog Posts <a class="btn btn-secondary" href="admin/add">Add</a></h1>
+        <div class="row" v-if="isLoaded">
+            
+            <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Header</th>
+      <th scope="col">Short Content</th>
+      <th scope="col">Image Path</th>
+      <th scope="col">Create Date</th>
+      <th scope="col">Update Date</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr v-for="post in posts">
+        <td>{{post.id}}</td>
+        <td>{{post.header}}</td>
+        <td>{{post.shortContent}}</td>
+        <td>{{post.imagePath}}</td>
+        <td>{{post.createDate}}</td>
+        <td>{{post.updateDate}}</td>
+        <td><a class="btn btn-secondary" :href="'admin/update?postId='+post.id">Update</a><a class="btn btn-secondary" :href="'admin/delete?postId='+post.id">Delete</a></td>
+    </tr>
+  </tbody>
+</table>
 
+        </div>
+        <div v-else>
+            <div class="row py-5">
+                <div class="col text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Vue{}
+@section Scripts{
+<script>
+    const { createApp } = Vue
+
+    createApp({
+        data() {
+            return {
+                isLoaded: false,
+                posts: [],
+            }
+        },
+        methods: {
+            getListBlogPost() {
+                axios.get("/admin/getlistblogpost").then(response => {
+                    this.$data.posts.push(...response.data)
+
+                    setTimeout(() => {
+                        this.$data.isLoaded = true
+                    }, 3000)
+                })
+            }
+        },
+        mounted() {
+            // methods can be called in lifecycle hooks, or other methods!
+            this.getListBlogPost()
+        }
+    }).mount('#app')
+</script>
+}
