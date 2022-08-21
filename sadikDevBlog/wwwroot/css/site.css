@@ -16,3 +16,11 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.blog-post-list-container{
+  opacity: 1;
+  transition: all 0.5s;
+}
+.blog-post-list-container:hover {
+  opacity: 0.5;
+}

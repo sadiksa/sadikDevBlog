@@ -1,9 +1,46 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<div id="app">
+    <div class="row">
+        <h1 class="border-bottom pb-1">Blog Posts</h1>
+        <div class="row">
+            <div
+                class="col-lg-4 col-md-6 col-sm-12  blog-post-list-container pt-3 rounded blog-post-list-container pt-3 rounded">
+                <div class="row">
+                    <div class="col">
+                        <img src="https://miro.medium.com/max/1200/1*OrjCKmou1jT4It5so5gvOA.jpeg"
+                            class="img-fluid rounded float-start border" alt="vue">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <h3 class="pt-3">Header</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <h6 class="fw-light">Short Content</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    {{ message }}
 </div>
 
+
+@section Scripts{
+<script>
+    const { createApp } = Vue
+
+    createApp({
+        data() {
+            return {
+                message: 'Hello Vue!'
+            }
+        }
+    }).mount('#app')
+</script>
+}
