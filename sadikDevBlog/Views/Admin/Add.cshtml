@@ -90,7 +90,7 @@
         methods: {
             saveData() {
                 console.log("html", quill.root.innerHTML)
-                axios.post('/admin/addpost', {
+                axios.post('/admin/addblog', {
                     header: this.$data.header,
                     shortContent: this.$data.shortContent,
                     imagePath: this.$data.imagePath,

@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using sadikDevBlog.Data;
 using sadikDevBlog.Models;
 using sadikDevBlog.Models.Blog;
@@ -33,7 +34,8 @@ public class AdminController : Controller
     {
         return View();
     }
-    public async Task<bool> AddPost([FromBody] AddPostModel model)
+    [HttpPost]
+    public async Task<bool> AddBlog([FromBody] AddPostModel model)
     {
         var postForAdded = new BlogPost
         {
@@ -42,7 +44,8 @@ public class AdminController : Controller
             Header = model.Header,
             ShortContent = model.ShortContent,
             ImagePath = model.ImagePath,
-            Content = new BlogPostDetail{
+            Content = new BlogPostDetail
+            {
                 Content = model.Content
             }
         };
@@ -53,13 +56,30 @@ public class AdminController : Controller
     }
     public IActionResult Update(int postId)
     {
-        var blogPost = _context.BlogPosts.First(x => x.Id == postId);
+        var blogPost = _context.Set<BlogPost>().Include(x => x.Content).First(x => x.Id == postId);
         return View(blogPost);
     }
-    public IActionResult Delete(int postId)
+    [HttpPost]
+    public async Task<bool> UpdateBlog([FromBody] UpdatePostModel model)
+    {
+        var postForUpdated = _context.Set<BlogPost>().Include(x => x.Content).First(x => x.Id == model.Id);
+        postForUpdated.Header = model.Header;
+        postForUpdated.ShortContent = model.ShortContent;
+        postForUpdated.ImagePath = model.ImagePath;
+        postForUpdated.UpdateDate = DateTime.Now;
+        postForUpdated.Content.Content = model.Content;
+        _context.Update(postForUpdated);
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
+    public async Task<IActionResult> Delete(int postId)
     {
         var blogPost = _context.BlogPosts.First(x => x.Id == postId);
-        return View(blogPost);
+        _context.Remove(blogPost);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("Index", "Admin");
     }
 }
 

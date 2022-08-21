@@ -1,0 +1,116 @@
+@{
+    ViewData["Title"] = "Update Post";
+}
+@model sadikDevBlog.Models.Blog.BlogPost
+
+<div id="app">
+
+    <div class="row">
+        <h1 class="border-bottom pb-1">@Model.Header<button class="btn btn-secondary" @@click="saveData()">Save</button>
+        </h1>
+
+        <div class="mb-3 row">
+            <label for="header" class="col-sm-2 col-form-label">Header</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="header" v-model="header">
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="shortContent" class="col-sm-2 col-form-label">Short Content</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="shortContent" v-model="shortContent">
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="imagePath" class="col-sm-2 col-form-label">Image Path</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="imagePath" v-model="imagePath">
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<div class="row">
+    <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">Content</label>
+        <div class="col-sm-10">
+
+            <div id="editor-container" style="height: 375px;">
+                @Html.Raw(Model.Content.Content)
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Vue{}
+@section Editor{}
+@section Scripts{
+<script>
+
+    var toolbarOptions = [
+        ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+        ['blockquote', 'code-block'],
+
+        [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+        [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+        [{ 'direction': 'rtl' }],                         // text direction
+
+        [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+        [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+        [{ 'font': [] }],
+        [{ 'align': [] }],
+
+        ['clean']                                         // remove formatting button
+    ];
+    var quill = new Quill('#editor-container', {
+        modules: {
+            toolbar: toolbarOptions
+        },
+        placeholder: 'Compose an epic...',
+        theme: 'snow'  // or 'bubble'
+    });
+
+
+    const { createApp } = Vue
+    createApp({
+        data() {
+            return {
+                id: @Model.Id,
+                header: "@Model.Header",
+                shortContent: "@Model.ShortContent",
+                imagePath: "@Model.ImagePath"
+
+            }
+        },
+        methods: {
+            saveData() {
+                console.log("html", quill.root.innerHTML)
+                axios.post('/admin/updateblog', {
+                    id: this.$data.id,
+                    header: this.$data.header,
+                    shortContent: this.$data.shortContent,
+                    imagePath: this.$data.imagePath,
+                    content: JSON.stringify(quill.root.innerHTML)
+                })
+                    .then(function (response) {
+                        console.log("res", response);
+                        if (response.data) {
+                            window.location = "/admin"
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
+        },
+        mounted() {
+            // methods can be called in lifecycle hooks, or other methods!
+        }
+    }).mount('#app')
+</script>
+}
